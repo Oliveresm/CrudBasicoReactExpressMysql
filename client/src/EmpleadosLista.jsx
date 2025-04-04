@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { useNavigate } from "react-router-dom";
 
 function EmpleadosLista({
   empleados,
@@ -7,6 +8,8 @@ function EmpleadosLista({
   editarEmpleado,
   deleteEmpleados,
 }) {
+  const navigate = useNavigate();
+
   useEffect(() => {
     getEmpleados();
   }, []);
@@ -53,12 +56,16 @@ function EmpleadosLista({
                     type="button"
                     className="btn btn-danger"
                     onClick={() => {
-                      deleteEmpleados(val.id , val.nombre);
+                      deleteEmpleados(val.id, val.nombre);
                     }}
                   >
                     Eliminar
                   </button>
-                  <button type="button" class="btn btn-success">
+                  <button
+                    type="button"
+                    class="btn btn-success"
+                    onClick={() => navigate(`/mensajes/${val.id}/${val.nombre}`)}
+                  >
                     Mensajes
                   </button>
                 </div>

@@ -84,3 +84,72 @@ app.delete("/delete/:id", (req, res) => {
 app.listen(3001, () => {
   console.log("Corriendo en el puerto 3001");
 });
+
+app.post("/createMensaje", (req, res) => {
+  const id = req.body.empleado_id;
+  const menssaje = req.body.menssage;
+
+  db.query(
+    "INSERT INTO mensajes (empleado_id, contenido) VALUES (?, ?)",
+    [id, menssaje],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send("Error al registrar el mensaje");
+      } else {
+        res.send("Mensaje registrado con éxito");
+      }
+    }
+  );
+});
+
+app.get("/Mensajes/:idEmpleado", (req, res) => {
+  const idEmpleado = req.params.idEmpleado;
+  db.query(
+    "SELECT * FROM mensajes WHERE empleado_id = ?",
+    [idEmpleado],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send("Error al registrar empleado");
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+app.delete("/deletemessage/:id", (req, res) => {
+  const id = req.params.id;
+
+  db.query("DELETE FROM mensajes WHERE id=?", [id], (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Error al Eliminador mensage");
+    } else {
+      res.send("Mensage Eliminado con exito");
+    }
+  });
+});
+
+app.put("/Mensajes/:id", (req, res) => {
+  const { id } = req.params;
+  const { contenido } = req.body;
+
+  db.query(
+    "UPDATE mensajes SET contenido = ? WHERE id = ?",
+    [contenido, id],
+    (err, result) => {
+      if (err) {
+        console.error(err);
+        res.status(500).send("Error al actualizar el mensaje");
+      } else if (result.affectedRows === 0) {
+        res.status(404).send("Mensaje no encontrado");
+      } else {
+        res.send("Mensaje actualizado con éxito");
+      }
+    }
+  );
+});
+
+
